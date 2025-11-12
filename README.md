@@ -1,0 +1,2 @@
+# Developing Interactive Jupyter Notebooks for analyzing participant meta-data from WhatsApp(Project)
+This project I have done from Research paper(Development and evaluation of Dona, a privacy-preserving donation platform for messaging data from WhatsApp, Facebook, and Instagram) under supervision of Dr olya hakobyan in my second semester of  masters degree to give indepth knowledge of data analysis  ,to learn and make something useful out of it which can be helpful for researchers to get indepth insights of data .
