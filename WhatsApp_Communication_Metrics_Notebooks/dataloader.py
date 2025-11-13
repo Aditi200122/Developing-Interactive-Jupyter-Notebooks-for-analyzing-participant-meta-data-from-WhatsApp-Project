@@ -14,8 +14,8 @@ import seaborn as sns
 OUTPUT_DIR = Path("outputs")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-DONATION_CSV = r"C:/Users/Dev/Documents/GitHub/Developing-Interactive-Jupyter-Notebooks-for-analyzing-participant-meta-data-from-WhatsApp-Project-/12570525/donation_table.csv"
-MESSAGES_CSV = r"C:/Users/Dev/Documents/GitHub/Developing-Interactive-Jupyter-Notebooks-for-analyzing-participant-meta-data-from-WhatsApp-Project-/12570525/messages_filtered_table.csv"
+DONATION_CSV = r"C:/Users/Dev/Documents/GitHub/Developing-Interactive-Jupyter-Notebooks-Project/12570525/donation_table.csv"
+MESSAGES_CSV = r"C:/Users/Dev/Documents/GitHub/Developing-Interactive-Jupyter-Notebooks-Project/12570525/messages_filtered_table.csv"
 
 #Loading data
 donations = pd.read_csv(DONATION_CSV)
