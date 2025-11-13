@@ -1,0 +1,20 @@
+#Core Python libraries
+python-dateutil==2.8.2
+pytz==2025.7
+
+#Data manipulation
+pandas==2.2.0
+numpy==1.25.0
+
+#Plotting and visualization
+matplotlib==3.8.0
+scipy==1.12.0  # for colormap utilities if needed
+
+#Interactive widgets for dashboards
+ipywidgets==8.1.0
+traitlets==5.9.0
+
+#IPython display tools
+IPython==8.15.0
+
+
