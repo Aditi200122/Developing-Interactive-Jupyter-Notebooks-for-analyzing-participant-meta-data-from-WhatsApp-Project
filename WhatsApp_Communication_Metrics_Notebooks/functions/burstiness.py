@@ -106,7 +106,12 @@ def show_raster_dashboard_overall():
         donor_rows = messages[messages["donation_id"].isin(
             donations.loc[donations["donor_id"] == donor, "donation_id"]
         )].copy()
+        # donor_rows = donor_rows[donor_rows["sender_id"] == donor].copy()
         donor_rows = donor_rows[donor_rows["sender_id"] == donor].copy()
+
+        # FIX: normalize date_only
+        donor_rows["date_only"] = pd.to_datetime(donor_rows["date_only"], errors="coerce")
+        donor_rows = donor_rows.dropna(subset=["date_only"])
 
         if donor_rows.empty:
             chat_select.options = ["No messages from donor"]
@@ -212,3 +217,4 @@ def show_raster_dashboard_overall():
         widgets.HBox([donor_input, donor_dropdown, chat_select], layout=widgets.Layout(gap="10px")),
         out_raster
     ]))
+
