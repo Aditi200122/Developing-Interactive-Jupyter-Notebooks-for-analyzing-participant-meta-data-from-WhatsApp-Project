@@ -1,16 +1,19 @@
 """This notebook investigates the temporary patterns of messaging activity to determine whether messages occur regularly or in bursts.
 By analyzing inter-message intervals (the time between consecutive messages), we can compute burstiness measures (B1 and B2) that quantify how clustered or evenly spread communication events are.
 """
-from dataloader import *                #Imports datasets like 'messages' and 'donations'
-from functions.pic_notes_save import *  #Imports function 'add_save_and_note_controls' for saving figure and taking notes 
+
+#imports datasets like messages and donations
+from dataloader import *   
+#imports function add_save_and_note_controls for saving figure and taking notes             
+from functions.pic_notes_save import *   
 
 def compute_burstiness(days):
     #Sorts all message dates 
     days_sorted = sorted(days)
-    #If less than 2 message days, burstiness can't be measured (no intervals)
+    #if less than 2 message days, burstiness can't be measured (no intervals)
     if len(days_sorted) < 2:
         return (np.nan, np.nan)
-    #Compute time gaps
+    #compute time gaps
     inter_event = np.diff(pd.to_datetime(days_sorted)).astype("timedelta64[D]").astype(int)
     #mu = mean and sigma = standard deviation of intervals.
     mu = inter_event.mean()
@@ -58,18 +61,18 @@ def plot_raster(days, title, B1=None, B2=None, ax=None, color=None):
 def show_raster_dashboard_overall():
     donor_ids = sorted(donations["donor_id"].unique())
 
-    #Input text to write donor id 
+    #input text to write donor id 
     donor_input = widgets.Text(
         placeholder="Type donor ID",
         description="Donor:",
         layout=widgets.Layout(width="300px")
     )
-    #Dropdown to select donor id
+    #dropdown to select donor id
     donor_dropdown = widgets.Dropdown(
         options=donor_ids,
         layout=widgets.Layout(width="300px")
     )
-    #Dropdown to select Chat(Overall aggregate,overall dominant, largest absolute b1 value or individual chats)
+    #dropdown to select Chat(Overall aggregate,overall dominant, largest absolute b1 value or individual chats)
     chat_select = widgets.Dropdown(
         options=["Select donor first"],
         description="Chat:",
@@ -78,7 +81,7 @@ def show_raster_dashboard_overall():
 
     out_raster = widgets.Output()
 
-    #Internal storage
+    #internal storage
     chat_select._burst_df = None
     chat_select._days_by_chat = None
     chat_select._donor_df = None
@@ -93,7 +96,7 @@ def show_raster_dashboard_overall():
 
     donor_input.observe(update_donor_dropdown, names="value")
 
-    #Load donor data
+    #loads donor data
     def load_donor(*args):
         out_raster.clear_output()
         donor = donor_input.value.strip() or donor_dropdown.value
@@ -102,14 +105,14 @@ def show_raster_dashboard_overall():
                 display(HTML(f"<b style='color:red;'>Invalid donor ID: {donor}</b>"))
             chat_select.options = ["Invalid donor"]
             return
-        #Filters messages sent by the selected donor
+        #filters messages sent by the selected donor
         donor_rows = messages[messages["donation_id"].isin(
             donations.loc[donations["donor_id"] == donor, "donation_id"]
         )].copy()
-        # donor_rows = donor_rows[donor_rows["sender_id"] == donor].copy()
+
         donor_rows = donor_rows[donor_rows["sender_id"] == donor].copy()
 
-        # FIX: normalize date_only
+        #normalized date_only
         donor_rows["date_only"] = pd.to_datetime(donor_rows["date_only"], errors="coerce")
         donor_rows = donor_rows.dropna(subset=["date_only"])
 
@@ -118,7 +121,7 @@ def show_raster_dashboard_overall():
             with out_raster:
                 display(HTML("<b style='color:orange;'>This donor has no sent messages.</b>"))
             return
-        #Compute burstiness per chat where each chat has list of message days and B1, B2 burstiness scores
+        #computes burstiness per chat where each chat has list of message days and B1, B2 burstiness scores
         days_by_chat = donor_rows.groupby("conversation_id")["date_only"].apply(lambda s: sorted(set(s)))
         burst = days_by_chat.apply(lambda d: compute_burstiness(d))
         burst_df = pd.DataFrame(burst.tolist(), index=days_by_chat.index, columns=["B1","B2"]).dropna(how="all")
@@ -130,7 +133,7 @@ def show_raster_dashboard_overall():
             #adds chat labels like Chat 12 (Bursty, B1=0.65) also adds three overall views
             chat_options.append((f"Chat {cid} ({label}, B1={b1:.2f})", cid))
         
-        """OVERALL_AGGREGATE show a raster that aggregates all donor's days across all chats into a single set of days and compute an aggregate B1. Useful to see the donor's overall pattern.
+        """OVERALL_AGGREGATE show a raster that aggregates all donors days across all chats into a single set of days and compute an aggregate B1.It is Useful to see the donors overall pattern.
         OVERALL_DOMINANT finds classification counts across chats (how many Regular/Bursty/Random) and plots an example chat for the dominant class (or multiple if tie).
         OVERALL_EXTREME finds the chat with the largest absolute B1 (most extreme) and plots it."""
 

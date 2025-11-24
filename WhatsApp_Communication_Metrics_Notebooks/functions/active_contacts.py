@@ -1,15 +1,15 @@
-"""This notebook help us visualize how many unique senders were active each day and daily words"""
+"""This notebook help us visualize how many unique senders were active each day and about daily words"""
 
-#Imports datasets like messages and donations
+#imports datasets like messages and donations
 from dataloader import *     
-#Imports helper for saving figures and adding notes           
+#imports helper for saving figures and adding notes           
 from functions.pic_notes_save import * 
 
+#heatmap showing chat activity by day.
 def plot_active_chats_heatmap_colored(df, view="All"):
-    """
-    Heatmap showing chat activity by day.
-    Sent = yellow, Received = cyan, Both = orange (for All view)
-    """
+
+    """Sent = yellow, Received = cyan, Both = orange (for All view)"""
+
     if df is None or df.empty:
         return None
 
@@ -37,7 +37,7 @@ def plot_active_chats_heatmap_colored(df, view="All"):
         grid = grid.reindex(index=all_dates, columns=all_chats, fill_value=0)
         cmap = LinearSegmentedColormap.from_list("custom_cmap", color_map)
 
-    else:  #All messages combine both sent & received into one heatmap
+    else:  #all messages combined both sent & received into one heatmap
         #Sent grid
         sent = (df[df["sender_id"]==df["sender_id"].iloc[0]]
                 .groupby(["date_only","conversation_id"]).size().unstack(fill_value=0) > 0).astype(int)
@@ -69,17 +69,18 @@ def plot_active_chats_heatmap_colored(df, view="All"):
     plt.tight_layout()
     return fig
 
+#dashboard for active chats heatmap
 def show_active_chats_dashboard():
     #gets all unique donor ids from donations data
     donor_ids = sorted(donations["donor_id"].unique())
     
-    #Donor text input
+    #donor text input
     donor_input = widgets.Text(
         placeholder="Type donor ID",
         description="Donor:",
         layout=widgets.Layout(width="300px")
     )
-    #Donor Dropdown 
+    #donor dropdown 
     donor_dropdown = widgets.Dropdown(
         options=donor_ids[:50],
         layout=widgets.Layout(width="300px")
@@ -164,15 +165,13 @@ def show_active_chats_dashboard():
 
 #time series plots 
 def plot_time_series_by_date(df, value_col, ylabel, title, ma_window=20):
+    """Plots a time series with moving average.
+
+    here df is dataFrame with date_only column
+    value_col is column to plot (e.g., 'word_count' or 'conversation_id')
+    ma_window is moving average window in days
     """
-    Plots a time series with optional moving average.
-    
-    df: DataFrame with 'date_only' column
-    value_col: column to plot (e.g., 'word_count' or 'conversation_id')
-    ylabel: y-axis label
-    title: figure title
-    ma_window: moving average window in days
-    """
+
     if df is None or df.empty:
         return None
 
@@ -200,7 +199,7 @@ def plot_time_series_by_date(df, value_col, ylabel, title, ma_window=20):
     plt.tight_layout()
     return fig
 
-
+#dashboard for daily words time series
 def show_daily_words_dashboard():
     donor_ids = sorted(donations["donor_id"].unique())
 
@@ -319,6 +318,7 @@ def show_daily_words_dashboard():
         out_plot
     ]))
 
+#dashboard for daily active contacts time series
 def show_daily_active_contacts_time_series_dashboard():
     donor_ids = sorted(donations["donor_id"].unique())
 
@@ -434,179 +434,3 @@ def show_daily_active_contacts_time_series_dashboard():
         widgets.HBox([start_date, end_date, ma_slider], layout=widgets.Layout(gap="10px")),
         out_plot
     ]))
-
-
-#heatmap for words dasboard 
-# def plot_daily_words_heatmap_words_axis(df, view="All"):
-#     """
-#     Heatmap of total words per day for selected donor/chat/view.
-#     Y-axis = total words (0-2000, readable ticks like time series)
-#     """
-#     if df is None or df.empty:
-#         return None
-
-#     df = df.copy()
-#     df["date_only"] = df["dt"].dt.date
-
-#     #filter by view
-#     if view == "Sent":
-#         df = df[df["sender_id"] == df["sender_id"].iloc[0]]
-#     elif view == "Received":
-#         df = df[df["sender_id"] != df["sender_id"].iloc[0]]
-
-#     #aggregate total words per day
-#     daily_words = df.groupby("date_only")["word_count"].sum()
-#     all_dates = pd.date_range(daily_words.index.min(), daily_words.index.max(), freq='D')
-#     daily_words = daily_words.reindex(all_dates, fill_value=0)
-
-#     #creates grid 1 row per word count bin
-#     max_words = 2000
-#     num_bins = 200 
-#     y_bins = np.linspace(0, max_words, num_bins)
-#     grid = np.zeros((num_bins, len(daily_words)))
-
-#     for i, val in enumerate(daily_words):
-#         idx = min(np.searchsorted(y_bins, val), num_bins-1)
-#         grid[:idx+1, i] = 1 
-
-#     cmap = LinearSegmentedColormap.from_list("words_cmap", ["black", "yellow"])
-
-#     fig, ax = plt.subplots(figsize=(14,6))
-#     ax.imshow(grid, origin='lower', aspect='auto', cmap=cmap, interpolation='nearest')
-
-#     #X-axis as dates
-#     ax.set_xticks(np.arange(0, len(all_dates), max(1, len(all_dates)//10)))
-#     ax.set_xticklabels([all_dates[i].strftime("%Y-%m-%d") for i in ax.get_xticks()], rotation=45, ha="right")
-
-#     #Y-axis ticks every 500 words
-#     ytick_values = np.arange(0, max_words+1, 500)
-#     ytick_indices = [np.searchsorted(y_bins, y) for y in ytick_values]
-#     ax.set_yticks(ytick_indices)
-#     ax.set_yticklabels(ytick_values)
-
-#     ax.set_xlabel("Date")
-#     ax.set_ylabel("Total Words")
-#     ax.set_title(f"Daily Words Heatmap for Donor {df['sender_id'].iloc[0]} ({view} Messages)")
-#     plt.tight_layout()
-#     return fig
-    
-
-# def show_daily_words_heatmap_words_axis_dashboard():
-#     donor_ids = sorted(donations["donor_id"].unique())
-
-#     donor_input = widgets.Text(
-#         placeholder="Type donor ID",
-#         description="Donor:",
-#         layout=widgets.Layout(width="300px")
-#     )
-#     donor_dropdown = widgets.Dropdown(
-#         options=donor_ids[:50],
-#         layout=widgets.Layout(width="300px")
-#     )
-#     chat_select = widgets.Dropdown(
-#         options=["Select donor first"],
-#         description="Chat:",
-#         layout=widgets.Layout(width="420px")
-#     )
-#     view_selector = widgets.RadioButtons(
-#         options=["Sent", "Received", "All"],
-#         description="View:",
-#         layout=widgets.Layout(width="200px")
-#     )
-#     start_date = widgets.DatePicker(description="Start:", disabled=True)
-#     end_date   = widgets.DatePicker(description="End:", disabled=True)
-#     out_plot = widgets.Output()
-#     donor_df_holder = {"df": None}
-
-#     #update dropdown while typing
-#     def update_donor_dropdown(change):
-#         text = change["new"].strip()
-#         if not text:
-#             donor_dropdown.options = donor_ids[:50]
-#         else:
-#             matches = [d for d in donor_ids if text.lower() in str(d).lower()]
-#             donor_dropdown.options = matches[:100] if matches else ["No match"]
-
-#     donor_input.observe(update_donor_dropdown, names="value")
-
-#     #load donor messages
-#     def load_donor(*args):
-#         donor = donor_input.value.strip() or donor_dropdown.value
-#         if donor not in donor_ids:
-#             chat_select.options = ["Invalid donor"]
-#             start_date.disabled = True
-#             end_date.disabled = True
-#             with out_plot:
-#                 out_plot.clear_output()
-#                 display(HTML(f"<b style='color:red;'>Invalid donor ID: {donor}</b>"))
-#             return
-
-#         df = messages[messages["donation_id"].isin(
-#             donations.loc[donations["donor_id"]==donor, "donation_id"]
-#         )].copy()
-
-#         if df.empty:
-#             chat_select.options = ["No messages"]
-#             start_date.disabled = True
-#             end_date.disabled = True
-#             with out_plot:
-#                 out_plot.clear_output()
-#                 display(HTML("<b style='color:orange;'>No messages for this donor.</b>"))
-#             return
-
-#         start_date.disabled = False
-#         end_date.disabled = False
-#         start_date.value = df["dt"].min().date()
-#         end_date.value = df["dt"].max().date()
-
-#         chats = df["conversation_id"].unique()
-#         options = [(f"Chat {c}", c) for c in chats]
-#         options.insert(0, ("All Chats", "ALL"))
-#         chat_select.options = options
-#         chat_select.value = options[0][1]
-
-#         donor_df_holder["df"] = df
-#         draw_plot()
-
-#     def filtered_df():
-#         df = donor_df_holder["df"]
-#         if df is None:
-#             return pd.DataFrame()
-#         df = df.copy()
-#         start_ts = pd.Timestamp(start_date.value)
-#         end_ts = pd.Timestamp(end_date.value) + pd.Timedelta(days=1)
-#         df = df[(df["dt"] >= start_ts) & (df["dt"] < end_ts)]
-#         if chat_select.value != "ALL":
-#             df = df[df["conversation_id"] == chat_select.value]
-#         return df
-
-#     def draw_plot(_=None):
-#         out_plot.clear_output()
-#         df = filtered_df()
-#         view = view_selector.value
-#         with out_plot:
-#             fig = plot_daily_words_heatmap_words_axis(df, view=view)
-#             if fig is None:
-#                 display(HTML("<b style='color:orange;'>No data to plot for selected range/chat.</b>"))
-#             else:
-#                 add_save_and_note_controls(
-#                     fig, donor_input.value.strip() or donor_dropdown.value,
-#                     chat_select.value, "daily_words_heatmap_words_axis"
-#                 )
-#                 plt.show()
-
-#     #event bindings
-#     donor_dropdown.observe(load_donor, names="value")
-#     donor_input.on_submit(load_donor)
-#     chat_select.observe(draw_plot, names="value")
-#     start_date.observe(draw_plot, names="value")
-#     end_date.observe(draw_plot, names="value")
-#     view_selector.observe(draw_plot, names="value")
-
-#     #layout
-#     display(widgets.VBox([
-#         widgets.HTML("<h2>Daily Words Heatmap Dashboard (Words Axis)</h2>"),
-#         widgets.HBox([donor_input, donor_dropdown, chat_select, view_selector], layout=widgets.Layout(gap="10px")),
-#         widgets.HBox([start_date, end_date], layout=widgets.Layout(gap="10px")),
-#         out_plot
-#     ]))

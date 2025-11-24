@@ -1,8 +1,8 @@
 "Measures how equally donor and contacts contribute to conversations"
 
-#Imports datasets like messages and donations
+#imports datasets like messages and donations
 from dataloader import *     
-#Imports helper for saving figures and adding notes           
+#imports helper for saving figures and adding notes           
 from functions.pic_notes_save import * 
 
 def compute_interaction_balance(df, donor_id):
@@ -38,7 +38,7 @@ def show_interaction_balance_dashboard():
         layout=widgets.Layout(width="250px")
     )
 
-    #View selector
+    #view selector
     view_radio = widgets.RadioButtons(
         options=[
             ("Bias Distribution + Summary", "bias_summary"),
@@ -142,7 +142,7 @@ def show_interaction_balance_dashboard():
             with chart_output:
                 sorted_df = balance_df.sort_values("bias")
                 fig, ax = plt.subplots(figsize=(max(8, len(sorted_df)*0.4), 5))
-                #Two bars per chat, donor vs contacts
+                #two bars per chat, donor vs contacts
                 x = np.arange(len(sorted_df))
                 width = 0.4
                 ax.bar(x - width/2, sorted_df["words_sent_by_donor"], width, label="Donor", color="mediumseagreen")
@@ -183,12 +183,12 @@ def show_interaction_balance_dashboard():
         donor_data_cache[donor] = balance_df
         render_view()
 
-    #Reactive Updates
+    #updates
     donor_input.on_submit(load_donor)
     donor_dropdown.observe(load_donor, names='value')
     view_radio.observe(render_view, names='value')
 
-    #Layout
+    #layout
     display(widgets.VBox([
         widgets.HTML("<h2>Interaction Balance Dashboard</h2>"),
         widgets.HBox([donor_input, donor_dropdown], layout=widgets.Layout(gap="10px")),

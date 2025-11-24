@@ -1,8 +1,8 @@
 """This notebook visualizes when messaging activity occurs across days and hours using a heatmap representation."""
 
-#Imports datasets like messages and donations
+#imports datasets like messages and donations
 from dataloader import *     
-#Imports helper for saving figures and adding notes           
+#imports helper for saving figures and adding notes           
 from functions.pic_notes_save import *  
 
 def plot_words_heatmap_black_yellow_dates(df, threshold=1):
@@ -14,7 +14,7 @@ def plot_words_heatmap_black_yellow_dates(df, threshold=1):
     df["hour"] = df["dt"].dt.hour
     df["date_only"] = df["dt"].dt.date
 
-    #Create a grid: rows = dates, columns = hours
+    #Creates grid where rows = dates, columns = hours
     #Sum of word counts per day per hour
     grid = df.groupby(["date_only", "hour"])["word_count"].sum().unstack(fill_value=0)
     #grid covers all dates (even those without messages)
@@ -51,18 +51,18 @@ def plot_words_heatmap_black_yellow_dates(df, threshold=1):
 def show_words_heatmap_dashboard_dates():
     donor_ids = sorted(donations["donor_id"].unique())
 
-    #Donor input
+    #donor input
     donor_input = widgets.Text(
         placeholder="Type donor ID",
         description="Donor:",
         layout=widgets.Layout(width="300px")
     )
-    #Dropdown to select donor id 
+    #dropdown to select donor id 
     donor_dropdown = widgets.Dropdown(
         options=donor_ids,
         layout=widgets.Layout(width="300px")
     )
-    #Dropdown to select specific chat or all chats 
+    #dropdown to select specific chat or all chats 
     chat_select = widgets.Dropdown(
         options=["Select donor first"],
         description="Chat:",
@@ -78,7 +78,7 @@ def show_words_heatmap_dashboard_dates():
 
     chat_select._donor_df = None
 
-    #Filter dropdown based on input
+    #filter dropdown based on input
     def update_donor_dropdown(change):
         text = change["new"].strip()
         if not text:

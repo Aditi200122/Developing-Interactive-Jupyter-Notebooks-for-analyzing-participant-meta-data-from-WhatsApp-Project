@@ -17,7 +17,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 DONATION_CSV = r"C:/Users/Dev/Documents/GitHub/Developing-Interactive-Jupyter-Notebooks-Project/12570525/donation_table.csv"
 MESSAGES_CSV = r"C:/Users/Dev/Documents/GitHub/Developing-Interactive-Jupyter-Notebooks-Project/12570525/messages_filtered_table.csv"
 
-#Loading data
+#loading data
 donations = pd.read_csv(DONATION_CSV)
 donations = donations[donations["source"] == "WhatsApp"]
 
