@@ -14,9 +14,9 @@ def add_save_and_note_controls(fig, donor_id, chat_id, analysis_type, extra_tag=
         if analysis_type.lower() == "gini":
             return f"{donor_id}-{chat_prefix}-gini{('-' + extra_tag) if extra_tag else ''}.png"
         elif analysis_type.lower() == "burstiness":
-            if extra_tag:  # for raster-overall types
+            if extra_tag:  #for raster-overall types
                 return f"{donor_id}-{chat_prefix}-burstiness-raster-{extra_tag}.png"
-            else:  # single chat
+            else:  #for single chat
                 return f"{donor_id}-{chat_prefix}-burstiness.png"
         elif analysis_type.lower() == "heatmap":
             return f"{donor_id}-{chat_prefix}-heatmap.png"
@@ -30,7 +30,7 @@ def add_save_and_note_controls(fig, donor_id, chat_id, analysis_type, extra_tag=
     #single global notes file for all donors and analyses
     NOTES_FILE = OUTPUT_DIR / "analysis_notes.txt"
 
-    #Saves figure
+    #saves figure
     def save_fig(_):
         filepath = OUTPUT_DIR / get_filename()
         fig.savefig(filepath, dpi=300, bbox_inches="tight")
@@ -38,7 +38,7 @@ def add_save_and_note_controls(fig, donor_id, chat_id, analysis_type, extra_tag=
             output.clear_output()
             display(HTML(f"<b style='color:green;'>Saved figure as {filepath.resolve()}</b>"))
 
-    #Appends notes
+    #appends notes
     def add_note(_):
         text = note_text.value.strip()
         if text:

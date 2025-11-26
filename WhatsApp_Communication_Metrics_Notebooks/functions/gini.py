@@ -35,20 +35,20 @@ def show_gini_dashboard():
         layout=widgets.Layout(width="300px")
     )
 
-    #for dropdown of donor lidt
+    #for dropdown of donor list
     donor_dropdown = widgets.Dropdown(
         options=donor_ids,
         description="Donor:",
         layout=widgets.Layout(width="300px")
     )
-    #for metric selection either messages or words
+    #radiobuttons for metric selection either messages or words
     metric_select = widgets.RadioButtons(
         options=["Messages", "Words"],
         description="Metric:",
         layout=widgets.Layout(width="200px")
     )
 
-    #outputs
+
     bar_output = widgets.Output()
     lorenz_output = widgets.Output()
     summary_output = widgets.Output()
@@ -86,7 +86,7 @@ def show_gini_dashboard():
 
         gini = calculate_gini(counts)
 
-        #always show bar chart
+        #shows bar chart
         with bar_output:
             counts_series = pd.Series(counts).sort_values(ascending=False)
             if counts_series.empty:
@@ -103,7 +103,7 @@ def show_gini_dashboard():
                 add_save_and_note_controls(fig, donor, "ALL", "gini", extra_tag="bar")
                 plt.show()
 
-        #always show lorenz curve
+        #shows lorenz curve
         with lorenz_output:
             values = np.array(sorted(counts.values())) if len(counts) > 0 else np.array([0])
             if values.sum() == 0:

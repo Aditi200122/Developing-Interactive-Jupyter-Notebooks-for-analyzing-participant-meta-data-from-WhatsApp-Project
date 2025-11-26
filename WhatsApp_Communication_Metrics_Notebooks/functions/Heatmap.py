@@ -158,7 +158,7 @@ def show_words_heatmap_dashboard_dates():
                 add_save_and_note_controls(fig, donor, chat_select.value, "heatmap")
                 plt.show()
 
-    #widget event bindings
+
     donor_dropdown.observe(lambda ch: load_donor(), names="value")
     donor_input.on_submit(load_donor)
     chat_select.observe(draw_plot, names="value")
@@ -166,7 +166,7 @@ def show_words_heatmap_dashboard_dates():
     end_date.observe(draw_plot, names="value")
     threshold_slider.observe(draw_plot, names="value")
 
-    #layout
+
     display(widgets.VBox([
         widgets.HTML("<h2>Words Heatmap Dashboard</h2>"),
         widgets.HBox([donor_input, donor_dropdown, chat_select], layout=widgets.Layout(gap="10px")),

@@ -38,9 +38,10 @@ All analyses are implemented as **interactive Jupyter notebooks** with visual da
 The notebooks expect the following data files (update paths if needed):
 
 ```python
-DONATION_CSV = "C:/Users/Dev/new_start/real_data/12570525/donation_table.csv"
-MESSAGES_CSV = "C:/Users/Dev/new_start/real_data/12570525/messages_filtered_table.csv"
-OUTPUT_DIR = "C:/Users/Dev/new_start/outputs"
+
+#put here your csv data file location its in dataloader.py file you can change there
+DONATION_CSV = r"C:/Users/Dev/Documents/GitHub/Developing-Interactive-Jupyter-Notebooks-Project/12570525/donation_table.csv" 
+MESSAGES_CSV = r"C:/Users/Dev/Documents/GitHub/Developing-Interactive-Jupyter-Notebooks-Project/12570525/messages_filtered_table.csv"
 ```
 
 ---

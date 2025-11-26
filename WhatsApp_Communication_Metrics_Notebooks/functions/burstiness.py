@@ -4,7 +4,7 @@ By analyzing inter-message intervals (the time between consecutive messages), we
 
 #imports datasets like messages and donations
 from dataloader import *   
-#imports function add_save_and_note_controls for saving figure and taking notes             
+#imports functions for saving figure and taking notes             
 from functions.pic_notes_save import *   
 
 def compute_burstiness(days):

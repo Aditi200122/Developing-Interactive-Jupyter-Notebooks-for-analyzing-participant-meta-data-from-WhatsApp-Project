@@ -8,7 +8,7 @@ from functions.pic_notes_save import *
 #heatmap showing chat activity by day.
 def plot_active_chats_heatmap_colored(df, view="All"):
 
-    """Sent = yellow, Received = cyan, Both = orange (for All view)"""
+    """Sent = yellow, Received = cyan, Both = Red (for All view)"""
 
     if df is None or df.empty:
         return None
@@ -168,7 +168,7 @@ def plot_time_series_by_date(df, value_col, ylabel, title, ma_window=20):
     """Plots a time series with moving average.
 
     here df is dataFrame with date_only column
-    value_col is column to plot (e.g., 'word_count' or 'conversation_id')
+    value_col is column to plot (e.g. word_count or conversation_id)
     ma_window is moving average window in days
     """
 
@@ -303,7 +303,6 @@ def show_daily_words_dashboard():
                 add_save_and_note_controls(fig, donor, chat_select.value, "daily_words")
                 plt.show()
 
-    #event bindings
     donor_dropdown.observe(load_donor, names="value")
     donor_input.on_submit(load_donor)
     chat_select.observe(draw_plot, names="value")
@@ -419,8 +418,8 @@ def show_daily_active_contacts_time_series_dashboard():
             else:
                 add_save_and_note_controls(fig, donor, chat_select.value, "daily_active_contacts")
                 plt.show()
+                
 
-    #event bindings
     donor_dropdown.observe(load_donor, names="value")
     donor_input.on_submit(load_donor)
     chat_select.observe(draw_plot, names="value")
